@@ -1,6 +1,0 @@
-Survive was a school project between 3 members, made in Unity3d using unityscript (their version of javascript). It's a simple 2d shooter game with random map generation.
-Enemies use A* pathfinding algorithm.
-
-To try out the game simply extract the zip and run the exe.
-
-Scripts folder contains all the source code programmed by our group.
