@@ -41,16 +41,16 @@ char filenames[2][25] = {	// put number of files on first [] and also change in 
 						{0xC5, 0xA9, 0xB8, 0xAE, 0xBF, 0xA1, 0xC0, 0xCC, 0xC5, 0xCD, 0x5F, 0xB3, 0xB2, 0x2E, 0x61, 0x63, 0x74}	//creator_M.act
 						};
 string fragini_checksum = "c163fc3d6a4a093db445ba856b80c7bd567310afbfa92b5b4155076d0d695cd0";	// checksum for FRAG.INI
-// checksums for each of the files
-string checksums[2] = {"e0c94b4b2b34def73ad649993005dfd0d7c4a2eacd513c7923fb03e3b004250b",	//creator_M.spr
+// check_sums for each of the files
+string check_sums[2] = {"e0c94b4b2b34def73ad649993005dfd0d7c4a2eacd513c7923fb03e3b004250b",	//creator_M.spr
 						"0f1c15cd8b124eb211e04e9eabde79197394d3c0aa4c8b38702b403af8a8dd24"	//creator_M.act
 					  };
 //file paths for normal grf block
-char normalfilepaths[2][78] = {"data\\sprite\\인간족\\몸통\\남\\크리에이터_남.spr",	//creator_M.spr
+char normal_file_paths[2][78] = {"data\\sprite\\인간족\\몸통\\남\\크리에이터_남.spr",	//creator_M.spr
 						        "data\\sprite\\인간족\\몸통\\남\\크리에이터_남.act"	//creator_M.act
 							  };
 // file paths for woe grf block
-char woefilepaths[2][30] = {"Test Folder\\creatorspr",
+char woe_file_paths[2][30] = {"Test Folder\\creatorspr",
 							 "Test Folder\\creatoract"
 						   };
 // FUNCTIONS 
@@ -398,7 +398,7 @@ unsigned int _cdecl GrfNameDetectionWoE(int filehandle, char *buffer)//can recie
 				// decomment if we only want to get handle on fail    if(*aux == 0xFFFFFFFF)
 
 				// add file encryption and decryption here
-				*aux = (int)CreateFileA(woefilepaths[filefound], GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);	// change to file place		
+				*aux = (int)CreateFileA(woe_file_paths[filefound], GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);	// change to file place		
 				if(*aux == 0xFFFFFFFF)	// checks if handle failed
 				{
 					printf("Failed to get handle in woe protection\n");
@@ -438,7 +438,7 @@ unsigned int _cdecl GrfContentCheckSumWoe(int dummy, int dummy1, int dummy2, int
 	// buffer[size] is the end of the string	
 
 	string checksum = sha256(string (buffer, size));
-	if(checksum != checksums[filefound])
+	if(checksum != check_sums[filefound])
 	{
 		printf("Different checksum in woe protection\n");
 		// Send to server saying diff checksum
@@ -470,15 +470,15 @@ unsigned int _cdecl NormalGrfProt(char *buffer)
 		if(FileNameParser(buffer, slash, count))
 		{
 			//printf("File %s Found\n",buffer);
-			fp = fopen(normalfilepaths[filefound],"r");
+			fp = fopen(normal_file_paths[filefound],"r");
 			if(fp != NULL)
 			{
 				fclose(fp);
-				string contents = sha256(Get_File_String(normalfilepaths[filefound]));
-				if(contents != checksums[filefound])
+				string contents = sha256(Get_File_String(normal_file_paths[filefound]));
+				if(contents != check_sums[filefound])
 				{
 					//contact server here
-					printf("Checksums are diff in normal protection\n");
+					printf("check_sums are diff in normal protection\n");
 					bytes_to_add[0] = 4;
 					bytes_to_add[1] = filefound;
 				}

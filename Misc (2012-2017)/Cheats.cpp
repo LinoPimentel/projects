@@ -13,14 +13,14 @@
 //***************** GLOBALS ***************************
 unsigned char targetON[6] = {0xE9, 0x0D, 0x02, 0x00, 0x00, 0x90}, targetOFF[6] = {0x0F, 0x85, 0x0C, 0x02, 0x00, 0x00};
 unsigned char groundON[2] = {0xEB, 0x46}, groundOFF[2] = {0x75, 0x46};
-unsigned char MoveFix[11] = {0x85, 0xF6, 0x8B, 0x97, 0xB4, 0x00, 0x00, 0x00, 0x8B, 0x4A, 0x40};
+unsigned char moveFix[11] = {0x85, 0xF6, 0x8B, 0x97, 0xB4, 0x00, 0x00, 0x00, 0x8B, 0x4A, 0x40};
 unsigned char FreeWalkOn[5] = {0x90,0x90,0x90,0x90,0x90},FreeWalkOff[5] = {0xEB,0x98,0x90,0x74,0xDC};
-unsigned char AtkMoveOn[6] = {0xE9,0x0A,0x03,0x00,0x00,0x90}, AtkMoveOff[6] = {0x0F,0x85,0x09,0x03,0x00,0x00};
-unsigned char *targetadress = (unsigned char*)0x0062ADFE;
-unsigned char *groundadress = (unsigned char*)0x0062B114;
-unsigned char *movefix = (unsigned char*)0x005A716E;
+unsigned char atkMoveeOn[6] = {0xE9,0x0A,0x03,0x00,0x00,0x90}, atkMoveeOff[6] = {0x0F,0x85,0x09,0x03,0x00,0x00};
+unsigned char *target_adress = (unsigned char*)0x0062ADFE;
+unsigned char *groundAdress = (unsigned char*)0x0062B114;
+unsigned char *moveFix = (unsigned char*)0x005A716E;
 unsigned char *freewalk = (unsigned char*)0x005A723A;
-unsigned char *atkmov = (unsigned char*)0x0062A926;
+unsigned char *atkMove = (unsigned char*)0x0062A926;
 HANDLE hConsole;
 
 //***************** PROTOTYPES ***********************
@@ -31,7 +31,7 @@ HANDLE ProcesstoAttach();
 void ShowValues(HANDLE hConsole, bool target, bool ground);
 void FixMoveFunc(HANDLE Process);
 bool FreeWalkToggle(int input, HANDLE Process);
-bool ToggleAtkMove(int input,HANDLE Process);
+bool ToggleatkMovee(int input,HANDLE Process);
 
 //***************** FUNCTIONS ***********************
 bool PrintProcessNameAndID ( DWORD processID, int i)
@@ -129,17 +129,17 @@ bool ToggleTarget(int input,HANDLE Process)
 	if(input == 1)		// make it on
 		{
 			
-			VirtualProtectEx(Process,targetadress, 6, PAGE_EXECUTE_READWRITE, &oldProtect);
-			WriteProcessMemory(Process,targetadress, targetON, 6,number);
-			VirtualProtectEx(Process,targetadress, 6, oldProtect, &oldProtect);
+			VirtualProtectEx(Process,target_adress, 6, PAGE_EXECUTE_READWRITE, &oldProtect);
+			WriteProcessMemory(Process,target_adress, targetON, 6,number);
+			VirtualProtectEx(Process,target_adress, 6, oldProtect, &oldProtect);
 			
 			return 1;
 		}
 		if(input == 0)		// make it off
 		{
-			VirtualProtectEx(Process,targetadress, 2, PAGE_EXECUTE_READWRITE, &oldProtect);
-			WriteProcessMemory(Process,targetadress, targetOFF, 2,number);
-			VirtualProtectEx(Process,targetadress, 2, oldProtect, &oldProtect);
+			VirtualProtectEx(Process,target_adress, 2, PAGE_EXECUTE_READWRITE, &oldProtect);
+			WriteProcessMemory(Process,target_adress, targetOFF, 2,number);
+			VirtualProtectEx(Process,target_adress, 2, oldProtect, &oldProtect);
 			return 0;
 		}
 }
@@ -152,17 +152,17 @@ bool ToggleGround(int input,HANDLE Process)
 	if(input == 1)
 		{
 			
-			VirtualProtectEx(Process,groundadress, 2, PAGE_EXECUTE_READWRITE, &oldProtect);
-			WriteProcessMemory(Process,groundadress, groundON, 2,number);
-			VirtualProtectEx(Process,groundadress, 2, oldProtect, &oldProtect);
+			VirtualProtectEx(Process,groundAdress, 2, PAGE_EXECUTE_READWRITE, &oldProtect);
+			WriteProcessMemory(Process,groundAdress, groundON, 2,number);
+			VirtualProtectEx(Process,groundAdress, 2, oldProtect, &oldProtect);
 			
 			return 1;
 		}
 		if(input == 0)
 		{
-			VirtualProtectEx(Process,groundadress, 2, PAGE_EXECUTE_READWRITE, &oldProtect);
-			WriteProcessMemory(Process,groundadress, groundOFF, 2,number);
-			VirtualProtectEx(Process,groundadress, 2, oldProtect, &oldProtect);
+			VirtualProtectEx(Process,groundAdress, 2, PAGE_EXECUTE_READWRITE, &oldProtect);
+			WriteProcessMemory(Process,groundAdress, groundOFF, 2,number);
+			VirtualProtectEx(Process,groundAdress, 2, oldProtect, &oldProtect);
 			return 0;
 		}
 }
@@ -172,9 +172,9 @@ void FixMoveFunc(HANDLE Process)
 	SIZE_T *number = new SIZE_T;
 	DWORD oldProtect;
 
-	VirtualProtectEx(Process, movefix, 11, PAGE_EXECUTE_READWRITE, &oldProtect);
-	WriteProcessMemory(Process, movefix, MoveFix, 11,number);
-	VirtualProtectEx(Process, movefix, 11, oldProtect, &oldProtect);
+	VirtualProtectEx(Process, moveFix, 11, PAGE_EXECUTE_READWRITE, &oldProtect);
+	WriteProcessMemory(Process, moveFix, moveFix, 11,number);
+	VirtualProtectEx(Process, moveFix, 11, oldProtect, &oldProtect);
 }
 
 bool FreeWalkToggle(int input, HANDLE Process)
@@ -198,23 +198,23 @@ bool FreeWalkToggle(int input, HANDLE Process)
 	}
 }
 
-bool ToggleAtkMove(int input,HANDLE Process)
+bool ToggleatkMovee(int input,HANDLE Process)
 {
 	SIZE_T *number = new SIZE_T;
 	DWORD oldProtect;
 
 	if(input == 1)
 	{
-		VirtualProtectEx(Process, atkmov, 6, PAGE_EXECUTE_READWRITE, &oldProtect);
-		WriteProcessMemory(Process, atkmov, AtkMoveOn, 6,number);
-		VirtualProtectEx(Process, atkmov, 6, oldProtect, &oldProtect);
+		VirtualProtectEx(Process, atkMove, 6, PAGE_EXECUTE_READWRITE, &oldProtect);
+		WriteProcessMemory(Process, atkMove, atkMoveeOn, 6,number);
+		VirtualProtectEx(Process, atkMove, 6, oldProtect, &oldProtect);
 		return 1;
 	}
 	else
 	{
-		VirtualProtectEx(Process, atkmov, 6, PAGE_EXECUTE_READWRITE, &oldProtect);
-		WriteProcessMemory(Process, atkmov, AtkMoveOff, 6,number);
-		VirtualProtectEx(Process, atkmov, 6, oldProtect, &oldProtect);
+		VirtualProtectEx(Process, atkMove, 6, PAGE_EXECUTE_READWRITE, &oldProtect);
+		WriteProcessMemory(Process, atkMove, atkMoveeOff, 6,number);
+		VirtualProtectEx(Process, atkMove, 6, oldProtect, &oldProtect);
 		return 0;
 	}
 }
@@ -318,18 +318,18 @@ int _tmain(int argc, _TCHAR* argv[])
 			case 1: target = ToggleTarget(!target,Process);break;
 			case 2: ground = ToggleGround(!ground,Process);break;
 			case 3: walk = FreeWalkToggle(!walk,Process);break;
-			case 4: moveatk = ToggleAtkMove(!moveatk,Process);break;
+			case 4: moveatk = ToggleatkMovee(!moveatk,Process);break;
 			case 0: {
 						target = ToggleTarget(0,Process);
 						ground = ToggleGround(0,Process);
 						walk = FreeWalkToggle(0,Process);
-						moveatk = ToggleAtkMove(0,Process);
+						moveatk = ToggleatkMovee(0,Process);
 					}break;
 			case 9:{
 						target = ToggleTarget(1,Process);
 						ground = ToggleGround(1,Process);
 						walk = FreeWalkToggle(1,Process);
-						moveatk = ToggleAtkMove(1,Process);
+						moveatk = ToggleatkMovee(1,Process);
 					}break;
 
 			default: break;
