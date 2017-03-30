@@ -1,3 +1,9 @@
+Estimation of time used: 50h
+Key concepts practiced / learnt: Java Threads, better code structure, TCP / UDP connections, programming Interfaces, RMI.
+
+
+Description:
+
 The source code in here was part of a university project between 2 members. The project included having a logic server,
 a TCP server, communicating through java RMI.
 Only the source code developed by Lino is included in here.
