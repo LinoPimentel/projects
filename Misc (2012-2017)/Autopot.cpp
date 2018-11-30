@@ -57,10 +57,10 @@ private:
 
 	void read_HP_SP_Values()
 	{
-		status.maxHP = readIntAtAdress((unsigned char*)0x00CAFAE0);
-		status.currentHP = readIntAtAdress((unsigned char*)0x00CAFADC);
-		status.maxSP = readIntAtAdress((unsigned char*)0x00CAFAE8);
-		status.currentSP = readIntAtAdress((unsigned char*)0x00CAFAE4);
+		status.maxHP = readIntAtAdress((unsigned char*)0x0083E1B8);
+		status.currentHP = readIntAtAdress((unsigned char*)0x0083E1B4);
+		status.maxSP = readIntAtAdress((unsigned char*)0x0083E1C0);
+		status.currentSP = readIntAtAdress((unsigned char*)0x0083E1BC);
 	}
 
 	void postKey(int keyCode)
